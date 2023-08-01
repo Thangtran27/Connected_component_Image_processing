@@ -27,7 +27,7 @@ def getLabel(neighbours):
 		if max_label == min_label:
 			return min_label
 		else:
-			label_dict[max_label] = min_label
+			label_dict[max_label] = min_label # asign label max (index) --> label min (value)
 			return min_label
 
 def connected_8(image_label):
@@ -59,7 +59,7 @@ def connected_8(image_label):
 		for i in range(row):
 			for j in range(column):
 				if image_label[i][j] in label_dict:
-					image_label[i][j] = label_dict[image_label[i][j]]
+					image_label[i][j] = label_dict[image_label[i][j]] # based on label dict above. convert max label --> min label
 	return image_label
 
 
@@ -107,7 +107,7 @@ B = np.array([[0, 0, 1, 0, 0],
 threshold = cv2.dilate(threshold.copy(), B, iterations=1)
 row, column = threshold.shape
 new_img = np.array(threshold)
-new_img = connected_8(new_img)
+new_img = connected_8(new_img) # like mask containing labels of connected components
 
 # Colorizing the labels
 output_img = np.zeros((row, column, 3), np.uint8)
@@ -118,11 +118,11 @@ for i in range(row):
 		label = new_img[i,j]
 		if label not in count and label not in labelColor:
 			count.append(label)
-		if label not in labelColor:
+		if label not in labelColor: # the same label --> same color
 			labelColor[label] = (random.randint(0, 255), random.randint(0, 255), random.randint(0, 255))
-		output_img[i, j, :] = labelColor[label]
+		output_img[i, j, :] = labelColor[label] # assign this pixel to color's label
 
-print(len(count))
+print(len(count)) # the number of labels
 cv2.imwrite("new_8.png", output_img)
 # cv2.imshow('test', output_img)
 # cv2.waitKey(0)
